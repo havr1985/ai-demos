@@ -17,7 +17,7 @@ export const CHATBOTS = {
       "AI customer service assistant for an Italian restaurant in Brooklyn. Handles reservations, menu questions, and dietary inquiries.",
     stack: ["Chatbase", "OpenAI"],
     status: "live",
-    chatbotId: "",
+    chatbotId: "F20oeu77ITCBViACqyg7G",
   },
   clinic: {
     slug: "clinic",
