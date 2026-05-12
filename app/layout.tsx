@@ -21,13 +21,28 @@ const fraunces = Fraunces({
   style: ["normal", "italic"],
 });
 
+const SITE_DESCRIPTION =
+  "Interactive demos of AI chatbots and automation workflows for small businesses. Built with Next.js, Chatbase, OpenAI, and n8n.";
+
 export const metadata: Metadata = {
+  // TODO: update when custom domain is live.
+  metadataBase: new URL("https://yurii-ai-demos.vercel.app"),
   title: {
     default: "Yurii — AI Automation Studio",
     template: "%s · Yurii AI Demos",
   },
-  description:
-    "Interactive demos of AI chatbots and automation workflows for small businesses. Built with Next.js, Chatbase, OpenAI, and n8n.",
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    type: "website",
+    siteName: "Yurii — AI Automation Studio",
+    title: "Yurii — AI Automation Studio",
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Yurii — AI Automation Studio",
+    description: SITE_DESCRIPTION,
+  },
 };
 
 export default function RootLayout({

@@ -1,13 +1,27 @@
 import { ArrowLeft, Phone } from "lucide-react";
 import Link from "next/link";
+import type { Metadata } from "next";
 
 import ChatbaseEmbed from "@/components/ChatbaseEmbed";
 import { CHATBOTS } from "@/lib/chatbots";
 
-export const metadata = {
-  title: "La Strada Trattoria",
-  description:
-    "Roman and Tuscan cuisine, handmade pasta, and a deep Italian wine list. A neighborhood trattoria in Brooklyn.",
+const PAGE_TITLE = "La Strada Trattoria";
+const PAGE_DESCRIPTION =
+  "Roman and Tuscan cuisine, handmade pasta, and a deep Italian wine list. A neighborhood trattoria in Brooklyn.";
+
+export const metadata: Metadata = {
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  openGraph: {
+    type: "website",
+    title: `${PAGE_TITLE} · Demo`,
+    description: PAGE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${PAGE_TITLE} · Demo`,
+    description: PAGE_DESCRIPTION,
+  },
 };
 
 export default function RestaurantPage() {
@@ -103,7 +117,7 @@ export default function RestaurantPage() {
 
         <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-y-12 gap-x-12 md:gap-x-16">
           <div>
-            <div className="flex items-baseline justify-between">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4">
               <h3 className="font-serif font-medium text-xl text-foreground">
                 Spaghetti Carbonara
               </h3>
@@ -118,7 +132,7 @@ export default function RestaurantPage() {
           </div>
 
           <div>
-            <div className="flex items-baseline justify-between">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4">
               <h3 className="font-serif font-medium text-xl text-foreground">
                 Tagliatelle Bolognese
               </h3>
@@ -133,7 +147,7 @@ export default function RestaurantPage() {
           </div>
 
           <div>
-            <div className="flex items-baseline justify-between">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4">
               <h3 className="font-serif font-medium text-xl text-foreground">
                 Margherita
               </h3>
@@ -148,7 +162,7 @@ export default function RestaurantPage() {
           </div>
 
           <div>
-            <div className="flex items-baseline justify-between">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4">
               <h3 className="font-serif font-medium text-xl text-foreground">
                 Osso Buco
               </h3>
@@ -163,7 +177,7 @@ export default function RestaurantPage() {
           </div>
 
           <div>
-            <div className="flex items-baseline justify-between">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4">
               <h3 className="font-serif font-medium text-xl text-foreground">
                 Tiramisu al Pistacchio
               </h3>
@@ -263,7 +277,7 @@ export default function RestaurantPage() {
               Make a reservation
             </a>
             <a
-              href="#"
+              href="tel:+17185550142"
               className="inline-flex items-center gap-1.5 font-sans font-medium text-sm tracking-wide text-foreground hover:text-accent transition-colors"
             >
               <Phone className="size-4" aria-hidden="true" />
