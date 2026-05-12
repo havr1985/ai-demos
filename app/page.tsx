@@ -1,5 +1,8 @@
 import { ArrowUpRight } from "lucide-react";
 
+import DemoCard from "@/components/DemoCard";
+import { CHATBOTS } from "@/lib/chatbots";
+
 export default function Home() {
   return (
     <>
@@ -27,7 +30,22 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="demos" />
+      <section
+        id="demos"
+        className="max-w-6xl mx-auto px-6 md:px-8 py-20 md:py-24"
+      >
+        <p className="text-xs uppercase tracking-wider font-medium text-muted mb-4">
+          Live demos
+        </p>
+        <h2 className="font-serif font-normal text-3xl md:text-4xl tracking-tight mb-12">
+          Three working AI assistants. Click any to interact.
+        </h2>
+        <div className="grid gap-6 md:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {Object.values(CHATBOTS).map((chatbot) => (
+            <DemoCard key={chatbot.slug} chatbot={chatbot} />
+          ))}
+        </div>
+      </section>
 
       <section
         id="about"
