@@ -26,7 +26,7 @@ const SITE_DESCRIPTION =
 
 export const metadata: Metadata = {
   // TODO: update when custom domain is live.
-  metadataBase: new URL("https://yurii-ai-demos.vercel.app"),
+  metadataBase: new URL("https://ai-demos-omega.vercel.app"),
   title: {
     default: "Yurii — AI Automation Studio",
     template: "%s · Yurii AI Demos",
