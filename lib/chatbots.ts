@@ -25,8 +25,8 @@ export const CHATBOTS = {
     monogram: "B",
     description:
       "Appointment booking and patient intake assistant for a dental clinic.",
-    stack: ["Voiceflow", "OpenAI"],
-    status: "coming-soon",
+    stack: ["n8n", "OpenAI", "Google Sheets"],
+    status: "live",
     chatbotId: "",
   },
   shop: {

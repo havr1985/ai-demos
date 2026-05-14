@@ -10,7 +10,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-const N8N_TIMEOUT_MS = 10_000;
+const N8N_TIMEOUT_MS = 20_000;
 const MAX_BODY_BYTES = 10_240;
 const MAX_MESSAGE_CHARS = 4_000;
 

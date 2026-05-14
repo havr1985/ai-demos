@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 const SESSION_KEY = "bright-smile-session-id";
 const MESSAGES_KEY = "bright-smile-messages";
 const MAX_LEN = 4000;
-const REQUEST_TIMEOUT_MS = 15_000;
+const REQUEST_TIMEOUT_MS = 25_000;
 const ERROR_DISMISS_MS = 8_000;
 const SCROLL_THRESHOLD = 40;
 const WELCOME =
