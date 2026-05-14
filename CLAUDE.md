@@ -319,3 +319,17 @@ If at any point during a task you would:
 - Tests (this is a static portfolio, not production software)
 - A real domain (we'll launch on `*.vercel.app` first)
 - Newsletter, contact form, anything dynamic
+
+---
+
+## Deployment notes
+
+### Environment variables (Vercel)
+
+Server-only env vars must be set in **Vercel → Project Settings → Environment Variables** (Production + Preview) with the same values used locally in `.env.local`. They are not bundled with the client.
+
+| Variable | Used by | Purpose |
+| --- | --- | --- |
+| `N8N_CLINIC_WEBHOOK_URL` | `/api/clinic-chat` | n8n webhook for the Bright Smile Dental (`/clinic`) demo. Server-only; never prefix with `NEXT_PUBLIC_`. |
+
+See `.env.example` for the full local-dev template.
