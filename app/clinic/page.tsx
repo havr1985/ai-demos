@@ -259,7 +259,17 @@ export default function ClinicPage() {
           </p>
         </div>
 
-        <CustomChat />
+        <CustomChat
+          apiEndpoint="/api/clinic-chat"
+          assistantName="Bright Smile Assistant"
+          welcomeMessage="Hi! I'm Bright Smile Assistant. I can help you with information about our services and pricing, check appointment availability, and book new appointments. What brings you in today?"
+          suggestionQuestions={[
+            "What are your hours?",
+            "How much is teeth whitening?",
+            "Can I book a new patient exam?",
+          ]}
+          storageKeyPrefix="bright-smile"
+        />
       </section>
 
       <section className="bg-accent text-background">

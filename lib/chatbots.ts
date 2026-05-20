@@ -35,8 +35,8 @@ export const CHATBOTS = {
     monogram: "&",
     description:
       "E-commerce chatbot with lead capture and backend automation via n8n.",
-    stack: ["Chatbase", "n8n", "OpenAI"],
-    status: "coming-soon",
+    stack: ["n8n", "Pinecone", "OpenAI"],
+    status: "live",
     chatbotId: "",
   },
 } as const satisfies Record<string, Chatbot>;

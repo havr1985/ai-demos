@@ -3,31 +3,33 @@
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type FormEvent,
   type KeyboardEvent,
 } from "react";
 
-import type { ChatErrorResponse, ChatResponse } from "@/lib/clinic-chat";
 import { cn } from "@/lib/utils";
 
-const SESSION_KEY = "bright-smile-session-id";
-const MESSAGES_KEY = "bright-smile-messages";
+type ChatResponse = { response: string; sessionId: string };
+type ChatErrorResponse = { error: string };
+
 const MAX_LEN = 4000;
 const REQUEST_TIMEOUT_MS = 25_000;
 const ERROR_DISMISS_MS = 8_000;
 const SCROLL_THRESHOLD = 40;
-const WELCOME =
-  "Hi! I'm Bright Smile Assistant. I can help you with information about our services and pricing, check appointment availability, and book new appointments. What brings you in today?";
-const SUGGESTIONS = [
-  "What are your hours?",
-  "How much is teeth whitening?",
-  "Can I book a new patient exam?",
-] as const;
 
 type Role = "user" | "assistant";
 type Message = { id: string; role: Role; content: string; timestamp: number };
+
+export type CustomChatProps = {
+  apiEndpoint: string;
+  assistantName: string;
+  welcomeMessage: string;
+  suggestionQuestions: readonly string[];
+  storageKeyPrefix: string;
+};
 
 function safeRead<T>(key: string): T | null {
   if (typeof window === "undefined") return null;
@@ -65,8 +67,8 @@ function newId(): string {
   return `id-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-function makeWelcome(): Message {
-  return { id: newId(), role: "assistant", content: WELCOME, timestamp: Date.now() };
+function makeWelcome(content: string): Message {
+  return { id: newId(), role: "assistant", content, timestamp: Date.now() };
 }
 
 function isMessage(value: unknown): value is Message {
@@ -139,7 +141,16 @@ function SuggestionRow({
   );
 }
 
-export default function CustomChat() {
+export default function CustomChat({
+  apiEndpoint,
+  assistantName,
+  welcomeMessage,
+  suggestionQuestions,
+  storageKeyPrefix,
+}: CustomChatProps) {
+  const sessionKey = useMemo(() => `${storageKeyPrefix}-session-id`, [storageKeyPrefix]);
+  const messagesKey = useMemo(() => `${storageKeyPrefix}-messages`, [storageKeyPrefix]);
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [sessionId, setSessionId] = useState<string>("");
   const [input, setInput] = useState<string>("");
@@ -157,27 +168,27 @@ export default function CustomChat() {
     // Hydrate localStorage-backed state on mount. setState in an effect is the
     // standard pattern for SSR-unsafe client storage; React batches the updates.
     /* eslint-disable react-hooks/set-state-in-effect -- mount-time hydration of localStorage */
-    const storedSession = safeRead<string>(SESSION_KEY);
+    const storedSession = safeRead<string>(sessionKey);
     const session =
       typeof storedSession === "string" && storedSession.length > 0 ? storedSession : newId();
-    if (session !== storedSession) safeWrite(SESSION_KEY, session);
+    if (session !== storedSession) safeWrite(sessionKey, session);
     setSessionId(session);
 
-    const storedMessages = safeRead<unknown>(MESSAGES_KEY);
+    const storedMessages = safeRead<unknown>(messagesKey);
     const restored =
       isMessageArray(storedMessages) && storedMessages.length > 0
         ? storedMessages
-        : [makeWelcome()];
+        : [makeWelcome(welcomeMessage)];
     setMessages(restored);
 
     setHydrated(true);
     /* eslint-enable react-hooks/set-state-in-effect */
-  }, []);
+  }, [sessionKey, messagesKey, welcomeMessage]);
 
   useEffect(() => {
     if (!hydrated) return;
-    safeWrite(MESSAGES_KEY, messages);
-  }, [messages, hydrated]);
+    safeWrite(messagesKey, messages);
+  }, [messages, hydrated, messagesKey]);
 
   useEffect(() => {
     const ta = textareaRef.current;
@@ -222,7 +233,7 @@ export default function CustomChat() {
       setError(null);
       clearErrorTimer();
       try {
-        const res = await fetch("/api/clinic-chat", {
+        const res = await fetch(apiEndpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: messageText, sessionId }),
@@ -246,7 +257,7 @@ export default function CustomChat() {
         textareaRef.current?.focus();
       }
     },
-    [sessionId, showError, clearErrorTimer],
+    [apiEndpoint, sessionId, showError, clearErrorTimer],
   );
 
   const send = useCallback(
@@ -272,18 +283,18 @@ export default function CustomChat() {
 
   const reset = useCallback(() => {
     clearErrorTimer();
-    safeRemove(SESSION_KEY);
-    safeRemove(MESSAGES_KEY);
+    safeRemove(sessionKey);
+    safeRemove(messagesKey);
     const fresh = newId();
-    safeWrite(SESSION_KEY, fresh);
+    safeWrite(sessionKey, fresh);
     setSessionId(fresh);
-    setMessages([makeWelcome()]);
+    setMessages([makeWelcome(welcomeMessage)]);
     setLastUserMessage(null);
     setInput("");
     setError(null);
     autoScrollRef.current = true;
     textareaRef.current?.focus();
-  }, [clearErrorTimer]);
+  }, [clearErrorTimer, sessionKey, messagesKey, welcomeMessage]);
 
   const handleScroll = useCallback(() => {
     const el = scrollRef.current;
@@ -316,7 +327,7 @@ export default function CustomChat() {
     >
       <div className="flex items-center justify-between border-b border-border bg-background px-5 py-3">
         <span className="font-serif italic text-lg text-foreground">
-          Bright Smile Assistant
+          {assistantName}
         </span>
         <button
           type="button"
@@ -338,7 +349,7 @@ export default function CustomChat() {
       >
         {hydrated && messages.map((m) => <Bubble key={m.id} msg={m} />)}
         {showSuggestions && (
-          <SuggestionRow suggestions={SUGGESTIONS} onPick={send} disabled={isLoading} />
+          <SuggestionRow suggestions={suggestionQuestions} onPick={send} disabled={isLoading} />
         )}
         {isLoading && <TypingBubble />}
       </div>
