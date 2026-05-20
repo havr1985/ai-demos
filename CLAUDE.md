@@ -331,5 +331,6 @@ Server-only env vars must be set in **Vercel → Project Settings → Environmen
 | Variable | Used by | Purpose |
 | --- | --- | --- |
 | `N8N_CLINIC_WEBHOOK_URL` | `/api/clinic-chat` | n8n webhook for the Bright Smile Dental (`/clinic`) demo. Server-only; never prefix with `NEXT_PUBLIC_`. |
+| `N8N_SHOP_WEBHOOK_URL` | `/api/shop-chat` | n8n webhook for the Loop & Linen (`/shop`) demo. Server-only; never prefix with `NEXT_PUBLIC_`. Must be set in Vercel project settings (Production + Preview), same as the clinic webhook variable. |
 
 See `.env.example` for the full local-dev template.
